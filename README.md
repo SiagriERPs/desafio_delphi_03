@@ -1,4 +1,4 @@
-# Desafio Trade
+# Desafio Controle de Negociação
 
 Quer fazer parte da transformação do campo ~~escrevendo~~ codando o futuro do agronegócio?
 
@@ -13,23 +13,23 @@ A [Aliare](https://www.aliare.co) está entre as maiores empresas de software pa
 
 Estamos com nossos clientes, pra fazer o campo acontecer. Temos orgulho de ajudar a construir o presente e o futuro do agronegócio.
 
-
-
 # O desafio
 
-Um determinado produtor necessita armazenar a sua produção de soja deste ano. Sendo assim este produtor irá realizar um contrato de venda para uma trade que será responsável por armazenar os grãos em seus silos.
+Um determinado produtor, precisa comprar insumos para a próxima safra, fertilizantes, agrotóxicos, sementes etc. O processo de compra é realizado alguns meses antes do início do plantio e para garantir bons preços e permitir que a distribuidora de insumos organize seu estoque, geralmente o produtor faz uma negociação de compra com o distribuidor.
+Levando em consideração o senário descrito, deverá ser desenvolvido um aplicativo para controle de negociações, onde será permitido cadastrar negociações entre um produtor e um distribuidor, bem como informar os produtos, quantidades e preços presentes nesta negociação.
 
-Basicamente no contrato de venda identificamos o produtor, a trade, o grão que será negociado e a quantidade. Cada contrato deve permitir a negociação de apenas um tipo de grão.
-	
-Uma trade pode possuir mais de um silo para armazenagem que geralmente tem a capacidade de armazenamento de 90.000 kg de grãos, independente do grão armazenado.
-	
-Desenvolva um aplicativo que seja possível gerenciar os contratos de vendas realizados entre o produtor e a trade, de forma que na gravação do contrato o sistema faça a distribuição automática dos grãos nos silos da trade. 
-  
-Cuidado com o limite de cada silo e suas validações básicas.
-  
-	O aplicativo deve permitir filtrar os contratos informando o CNPJ do produtor ou da trade.
-	O aplicativo deve permitir gerenciar vários contratos de venda, de várias trades e produtores diferentes.
-	O aplicativo deve permitir imprimir um relatório contendo todos os contratos cadastrados informando o nome do produto, nome da trade, o grão do contrato e a quantidade armazenada em kg.
+### Requisitos
+
+* Deverá ser criado um cadastro de produtor, onde será informado o nome do produtor e seu CPF/CNPJ. Também será possível no cadastro do produtor, informar o limite de crédito que ele tem com cada distribuidor. Lembrando que um produtor pode ter diversos limites de crédito com diversos distribuidores.
+* Deverá ser criado um cadastro de distribuidor onde será informado o nome e CNPJ do distribuidor.
+* Deverá ser criado um cadastro de produto onde o usuário informará o nome, e seu preço de venda.
+* Deverá ser criado uma tela de manutenção de negociação onde o usuário poderá informar os dados para realizar o cadastro ou alteração de uma negociação. Nesta tela o usuário poderá informar o produtor, o distribuidor e os itens da negociação. Deverá ter um campo totalizando a negociação e um informando o status daquela negociação.
+* A negociação possui apenas 4 status possíveis, “Pendente”, “Aprovada”, “Concluir” e “Cancelada”. Sempre que uma negociação for gravada o status padrão dela será “Pendente”. Para aprovar, concluir ou cancelar esta negociação existirá uma tela para manutenção de negociação, onde o usuário irá informar o código da negociação pendente e então ele poderá aprovar, concluir ou cancelar.
+* O produtor deve possuir crédito para realizar uma negociação, sendo assim no cadastro dos dados do produtor será informado o limite de crédito em reais que ele tem com um determinado distribuidor. Dessa forma caso o produtor deseje efetuar uma negociação que ultrapasse o seu limite de crédito o sistema deverá bloquear.
+* Para validar o crédito de um produtor na geração da negociação, o sistema deverá considerar também as negociações aprovadas, assim caso um produtor queira fazer uma negociação no valor de R$ 50.000,00 com um distribuir e ele possuir um limite de R$ 60.000,00 com este distribuidor o sistema deverá permitir, porém se este produto possuir uma outra negociação aprovada de R$ 20.000,00 então o sistema deverá bloquear visto que o limite geral será ultrapassado.
+* Deverá ser criado uma tela de consulta de negociações que permita filtrar as negociações de um determinado produtor ou distribuidor, nesta tela também poderemos imprimir um relatório referente as negociações filtradas.
+* O relatório deverá exibir o nome do produtor, o nome do distribuidor, o código do contrato, a data de cadastro, a data de aprovação, a data de conclusão, a data de cancelamento caso exista e o valor total do contrato.
+
   
   Siga abaixo a estrutura de diretórios  já criada para este projeto:
   
