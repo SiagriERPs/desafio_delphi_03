@@ -16,7 +16,7 @@ Estamos com nossos clientes, pra fazer o campo acontecer. Temos orgulho de ajuda
 # O desafio
 
 Um determinado produtor, precisa comprar insumos para a próxima safra, fertilizantes, agrotóxicos, sementes etc. O processo de compra é realizado alguns meses antes do início do plantio e para garantir bons preços e permitir que a distribuidora de insumos organize seu estoque, geralmente o produtor faz uma negociação de compra com o distribuidor.
-Levando em consideração o senário descrito, deverá ser desenvolvido um aplicativo para controle de negociações, onde será permitido cadastrar negociações entre um produtor e um distribuidor, bem como informar os produtos, quantidades e preços presentes nesta negociação.
+Levando em consideração o cenário descrito, deverá ser desenvolvido um aplicativo para controle de negociações, onde será permitido cadastrar negociações entre um produtor e um distribuidor, bem como informar os produtos, quantidades e preços presentes nesta negociação.
 
 ### Requisitos
 
