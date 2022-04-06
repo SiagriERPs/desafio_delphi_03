@@ -1,0 +1,212 @@
+/******************************************************************************/
+/****                                PRODUTOR                              ****/
+/******************************************************************************/
+
+CREATE GENERATOR GEN_PRODUTOR_ID;
+
+CREATE TABLE PRODUTOR (
+    ID        INTEGER NOT NULL,
+    NOME      VARCHAR(100),
+    CPF_CNPJ  VARCHAR(14)
+);
+
+ALTER TABLE PRODUTOR ADD CONSTRAINT PK_PRODUTOR PRIMARY KEY (ID);
+
+CREATE OR ALTER TRIGGER PRODUTOR_BI FOR PRODUTOR
+ACTIVE BEFORE INSERT POSITION 0
+as
+begin
+  if (new.id is null or (new.id=0)) then
+    new.id = gen_id(gen_produtor_id,1);
+end;
+
+
+/******************************************************************************/
+/****                            DISTRIBUIDOR                              ****/
+/******************************************************************************/
+CREATE GENERATOR GEN_DISTRIBUIDOR_ID;
+
+CREATE TABLE DISTRIBUIDOR (
+    ID    INTEGER NOT NULL,
+    NOME  VARCHAR(100),
+    CNPJ  VARCHAR(14)
+);
+
+ALTER TABLE DISTRIBUIDOR ADD CONSTRAINT PK_DISTRIBUIDOR PRIMARY KEY (ID);
+CREATE OR ALTER TRIGGER DISTRIBUIDOR_BI FOR DISTRIBUIDOR
+ACTIVE BEFORE INSERT POSITION 0
+as
+begin
+  if (new.id is null or (new.id=0)) then
+    new.id = gen_id(gen_distribuidor_id,1);
+end;
+
+
+/******************************************************************************/
+/****                                PRODUTOS                              ****/
+/******************************************************************************/
+CREATE GENERATOR GEN_PRODUTOS_ID;
+
+CREATE TABLE PRODUTOS (
+    ID     INTEGER NOT NULL,
+    NOME   VARCHAR(100),
+    PRECO  DECIMAL(15,2) DEFAULT 0
+);
+
+ALTER TABLE PRODUTOS ADD CONSTRAINT PK_PRODUTOS PRIMARY KEY (ID);
+
+CREATE OR ALTER TRIGGER PRODUTOS_BI FOR PRODUTOS
+ACTIVE BEFORE INSERT POSITION 0
+as
+begin
+  if (new.id is null or (new.id=0)) then
+    new.id = gen_id(gen_produtos_id,1);
+end;
+
+/******************************************************************************/
+/****                        CONTRATOS_STATUS                              ****/
+/******************************************************************************/
+
+CREATE TABLE CONTRATOS_STATUS (
+    ID    INTEGER NOT NULL,
+    NOME  VARCHAR(20)
+);
+
+ALTER TABLE CONTRATOS_STATUS ADD CONSTRAINT PK_CONTRATOS_STATUS PRIMARY KEY (ID);
+
+INSERT INTO CONTRATOS_STATUS VALUES(0,'PENDENTE');
+INSERT INTO CONTRATOS_STATUS VALUES(1,'APROVADO');
+INSERT INTO CONTRATOS_STATUS VALUES(2,'CONCLUIDO');
+INSERT INTO CONTRATOS_STATUS VALUES(3,'CANCELADO');
+
+/******************************************************************************/
+/****                                CONTRATOS                             ****/
+/******************************************************************************/
+
+CREATE GENERATOR GEN_CONTRATOS_ID;
+
+CREATE TABLE CONTRATOS (
+    ID              INTEGER NOT NULL,
+    PRODUTORID      INTEGER,
+    DISTRIBUIDORID  INTEGER,
+    STATUS          INTEGER DEFAULT 0 NOT NULL,
+	TOTAL           DECIMAL(15,2) DEFAULT 0,
+    DT              DATE DEFAULT 'NOW',
+    DT_APROVADO     DATE,
+    DT_CONCLUIDO    DATE,
+    DT_CANCELADO    DATE
+);
+ALTER TABLE CONTRATOS ADD CONSTRAINT PK_CONTRATOS PRIMARY KEY (ID);
+
+ALTER TABLE CONTRATOS ADD CONSTRAINT FK_CONTRATOS_DISTRIBUIDOR FOREIGN KEY (DISTRIBUIDORID) REFERENCES DISTRIBUIDOR (ID);
+ALTER TABLE CONTRATOS ADD CONSTRAINT FK_CONTRATOS_PRODUTOR FOREIGN KEY (PRODUTORID) REFERENCES PRODUTOR (ID);
+ALTER TABLE CONTRATOS ADD CONSTRAINT FK_CONTRATOS_STATUS FOREIGN KEY (STATUS) REFERENCES CONTRATOS_STATUS (ID);
+
+CREATE OR ALTER TRIGGER CONTRATOS_BI FOR CONTRATOS
+ACTIVE BEFORE INSERT POSITION 0
+as
+begin
+  if (new.id is null or (new.id=0)) then
+    new.id = gen_id(gen_contratos_id,1);
+   if (new.status=1 AND new.DT_APROVADO is null) then
+       new.DT_APROVADO = CURRENT_DATE;
+   if (new.status=2 AND new.DT_CONCLUIDO is null) then
+       new.DT_CONCLUIDO = CURRENT_DATE;
+   if (new.status=3 AND new.DT_CANCELADO is null) then
+       new.DT_CANCELADO = CURRENT_DATE;	
+end;
+
+
+/******************************************************************************/
+/****                           RODUTOR_LIMITE                             ****/
+/******************************************************************************/
+CREATE GENERATOR GEN_PRODUTOR_LIMITE_ID;
+
+CREATE TABLE PRODUTOR_LIMITE (
+    ID              INTEGER NOT NULL,
+    PRODUTORID      INTEGER,
+    DISTRIBUIDORID  INTEGER,
+    LIMITE          DECIMAL(15,2)
+);
+
+ALTER TABLE PRODUTOR_LIMITE ADD CONSTRAINT PK_PRODUTOR_LIMITE PRIMARY KEY (ID);
+
+ALTER TABLE PRODUTOR_LIMITE ADD CONSTRAINT FK_PRODUTOR_LIMITE_DISTRIBUIDOR FOREIGN KEY (DISTRIBUIDORID) REFERENCES DISTRIBUIDOR (ID);
+ALTER TABLE PRODUTOR_LIMITE ADD CONSTRAINT FK_PRODUTOR_LIMITE_PRODUTOR FOREIGN KEY (PRODUTORID) REFERENCES PRODUTOR (ID);
+
+CREATE OR ALTER TRIGGER PRODUTOR_LIMITE_BI FOR PRODUTOR_LIMITE
+ACTIVE BEFORE INSERT POSITION 0
+as
+begin
+  if (new.id is null or (new.id=0)) then
+    new.id = gen_id(gen_produtor_limite_id,1);
+end;
+
+
+/******************************************************************************/
+/****                          CONTRATOS_ITENS                             ****/
+/******************************************************************************/
+CREATE GENERATOR GEN_CONTRATOS_ITENS_ID;
+
+CREATE TABLE CONTRATOS_ITENS (
+    ID          INTEGER NOT NULL,
+    CONTRATOID  INTEGER,
+    PRODUTOID   INTEGER,
+    QUANTIDADE  DECIMAL(15,2) DEFAULT 0,
+    VALOR       DECIMAL(15,2) DEFAULT 0,
+    TOTAL       DECIMAL(15,2) DEFAULT 0
+);
+
+ALTER TABLE CONTRATOS_ITENS ADD CONSTRAINT PK_CONTRATOS_ITENS PRIMARY KEY (ID);
+
+ALTER TABLE CONTRATOS_ITENS ADD CONSTRAINT FK_CONTRATOS_ITENS_CONTRATOS FOREIGN KEY (CONTRATOID) REFERENCES CONTRATOS (ID);
+ALTER TABLE CONTRATOS_ITENS ADD CONSTRAINT FK_CONTRATOS_ITENS_PRODUTOS FOREIGN KEY (PRODUTOID) REFERENCES PRODUTOS (ID);
+
+CREATE OR ALTER TRIGGER CONTRATOS_ITENS_BI FOR CONTRATOS_ITENS
+ACTIVE BEFORE INSERT POSITION 0
+as
+begin
+  if (new.id is null or (new.id=0)) then
+    new.id = gen_id(gen_contratos_itens_id,1);
+end;
+
+
+
+/******************************************************************************/
+/****                          UPDATE_CONTRATOS                            ****/
+/******************************************************************************/
+CREATE OR ALTER TRIGGER UPDATE_CONTRATOS FOR CONTRATOS_ITENS
+ACTIVE AFTER INSERT OR UPDATE OR DELETE POSITION 0
+AS
+begin
+  UPDATE CONTRATOS
+  SET CONTRATOS.TOTAL = COALESCE(
+      (
+        SELECT SUM(IT.total)
+        FROM CONTRATOS_ITENS IT
+        WHERE IT.contratoid = COALESCE(NEW.contratoid, OLD.contratoid)
+       ), 0)
+   WHERE CONTRATOS.ID =  COALESCE(NEW.contratoid, OLD.contratoid);
+end
+
+
+
+/******************************************************************************/
+/****                          UPDATE_LIMITE                               ****/
+/******************************************************************************/
+CREATE OR ALTER TRIGGER UPDATE_LIMITE FOR CONTRATOS
+ACTIVE AFTER INSERT OR UPDATE OR DELETE POSITION 0
+AS
+begin
+  UPDATE produtor_limite
+  SET produtor_limite.SALDO = produtor_limite.limite - COALESCE(
+      (
+        SELECT SUM(C.total)
+        FROM CONTRATOS C
+        WHERE C.produtorid =  COALESCE(NEW.produtorid, OLD.produtorid)
+        AND C.distribuidorid =  COALESCE(NEW.distribuidorid, OLD.distribuidorid)
+        AND c.status < 2
+       ), 0)
+   WHERE produtor_limite.produtorid =  COALESCE(NEW.produtorid, OLD.produtorid)
+        AND produtor_limite.distribuidorid =  COALESCE(NEW.distribuidorid, OLD.distribuidorid);
+end

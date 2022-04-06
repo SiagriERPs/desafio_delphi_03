@@ -1,0 +1,36 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{C8E936B7-3195-48AC-A01C-038307159427}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Agro.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="Agro">
+        <MSBuild Projects="Agro.dproj"/>
+    </Target>
+    <Target Name="Agro:Clean">
+        <MSBuild Projects="Agro.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Agro:Make">
+        <MSBuild Projects="Agro.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="Agro"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="Agro:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="Agro:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

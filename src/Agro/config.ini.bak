@@ -1,0 +1,14 @@
+[CONFIG]
+drivername=FIREBIRD
+blobsize=-1
+localecode=0000
+commitretain=False
+Database=C:\Delphi\desafio_delphi_03\data\BD.FDB
+User_Name=SYSDBA
+password=masterkey
+sqldialect=3
+isolationlevel=ReadCommitted
+waitonlocks=True
+trim char=False
+rolename=RoleName
+ServerCharSet=WIN1251
