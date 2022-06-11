@@ -1,0 +1,6 @@
+SET SQL DIALECT 3;
+CREATE DATABASE 'D:\Controle de Negociação\desafio_delphi_03\data\Negociacao.fdb'
+USER 'SYSDBA'
+PAGE_SIZE = 4096
+DEFAULT CHARACTER SET ISO8859_1
+;
