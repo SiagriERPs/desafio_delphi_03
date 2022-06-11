@@ -10,8 +10,8 @@ uses
 type
   TfrmProdutoAltera = class(TForm)
     grdDistribuidor: TDBGrid;
-    btnAlterar: TBitBtn;
-    btnFechar: TBitBtn;
+    btnAlterar: TSpeedButton;
+    btnFechar: TSpeedButton;
     procedure btnAlterarClick(Sender: TObject);
     procedure btnFecharClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -31,24 +31,34 @@ implementation
 uses uDM, uProdutoCadastro;
 
 procedure TfrmProdutoAltera.btnAlterarClick(Sender: TObject);
+var
+  lfrmProdutoCadastro: TfrmProdutoCadastro;
 begin
-  DataModule1.qryProduto.Edit;
+  lfrmProdutoCadastro := TfrmProdutoCadastro.Create(Application);
 
-  frmProdutoCadastro.edtNome.Text := DataModule1.qryProduto.FieldByName('nome').AsString;
-  frmProdutoCadastro.edtPreco.Text := DataModule1.qryProduto.FieldByName('valor').AsString;
-
-  frmProdutoCadastro.ShowModal;
+  try
+    lfrmProdutoCadastro.Codigo := DM.qryProduto.FieldByName('Codigo').AsInteger;
+    lfrmProdutoCadastro.Nome := DM.qryProduto.FieldByName('nome').AsString;
+    lfrmProdutoCadastro.Preco := DM.qryProduto.FieldByName('valor').AsString;
+    lfrmProdutoCadastro.ShowModal;
+    DM.qryProduto.DisableControls;
+  finally
+    FreeAndNil(lfrmProdutoCadastro);
+    DM.qryProduto.Close;
+    DM.qryProduto.Open;
+    DM.qryProduto.EnableControls;
+  end;
 end;
 
 procedure TfrmProdutoAltera.btnFecharClick(Sender: TObject);
 begin
+  DM.qryProduto.Close;
   Close;
 end;
 
 procedure TfrmProdutoAltera.FormShow(Sender: TObject);
 begin
-  if DataModule1.qryProduto.Active = False then
-    DataModule1.qryProduto.Open;
+  DM.qryProduto.Open;
 end;
 
 end.

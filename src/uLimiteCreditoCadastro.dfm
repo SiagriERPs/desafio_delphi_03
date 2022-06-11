@@ -10,25 +10,46 @@ object frmLimiteCreditoCadastro: TfrmLimiteCreditoCadastro
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'Tahoma'
+  Font.Name = 'Segoe UI'
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Label5: TLabel
     Left = 8
     Top = 56
-    Width = 24
+    Width = 26
     Height = 13
     Caption = 'Valor'
   end
   object Label2: TLabel
     Left = 8
     Top = 8
-    Width = 54
+    Width = 62
     Height = 13
     Caption = 'Distribuidor'
+  end
+  object btnOk: TSpeedButton
+    Left = 240
+    Top = 113
+    Width = 75
+    Height = 25
+    Caption = 'Gravar'
+    ImageIndex = 0
+    Images = frmPrincipal.ImageList
+    OnClick = btnOkClick
+  end
+  object SpeedButton1: TSpeedButton
+    Left = 326
+    Top = 113
+    Width = 75
+    Height = 25
+    Caption = 'Cancelar'
+    ImageIndex = 1
+    Images = frmPrincipal.ImageList
+    OnClick = btnCancelarClick
   end
   object cboDistribuidor: TDBLookupComboBox
     Left = 8
@@ -37,38 +58,16 @@ object frmLimiteCreditoCadastro: TfrmLimiteCreditoCadastro
     Height = 21
     KeyField = 'CODIGO'
     ListField = 'NOME'
-    ListSource = DataModule1.dtsDistribuidor
+    ListSource = DM.dtsDistribuidor
     TabOrder = 0
   end
-  object btnOk: TBitBtn
-    Left = 247
-    Top = 117
-    Width = 75
-    Height = 25
-    Caption = 'OK'
-    Default = True
-    NumGlyphs = 2
-    TabOrder = 1
-    OnClick = btnOkClick
-  end
-  object btnCancelar: TBitBtn
-    Left = 327
-    Top = 117
-    Width = 75
-    Height = 25
-    Cancel = True
-    Caption = 'Cancelar'
-    NumGlyphs = 2
-    TabOrder = 2
-    OnClick = btnCancelarClick
-  end
-  object edtValor: TMaskEdit
+  object edtValor: TNumberBox
     Left = 8
     Top = 75
     Width = 113
     Height = 21
     Alignment = taRightJustify
-    TabOrder = 3
-    Text = ''
+    Mode = nbmCurrency
+    TabOrder = 1
   end
 end

@@ -10,8 +10,8 @@ uses
 type
   TfrmDistribuidorAltera = class(TForm)
     grdDistribuidor: TDBGrid;
-    btnAlterar: TBitBtn;
-    btnFechar: TBitBtn;
+    btnAlterar: TSpeedButton;
+    btnFechar: TSpeedButton;
     procedure btnAlterarClick(Sender: TObject);
     procedure btnFecharClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -31,24 +31,34 @@ implementation
 uses uDM, uDistribuidorCadastro;
 
 procedure TfrmDistribuidorAltera.btnAlterarClick(Sender: TObject);
+var
+  lfrmDistribuidorCadastro: TfrmDistribuidorCadastro;
 begin
-  DataModule1.qryDistribuidor.Edit;
+  lfrmDistribuidorCadastro := TfrmDistribuidorCadastro.Create(Application);
 
-  frmDistribuidorCadastro.edtNome.Text := DataModule1.qryDistribuidor.FieldByName('nome').AsString;
-  frmDistribuidorCadastro.edtCPFCNPJ.Text := DataModule1.qryDistribuidor.FieldByName('cpfcnpj').AsString;
-
-  frmDistribuidorCadastro.ShowModal;
+  try
+    lfrmDistribuidorCadastro.Codigo := DM.qryDistribuidor.FieldByName('Codigo').AsInteger;
+    lfrmDistribuidorCadastro.Nome := DM.qryDistribuidor.FieldByName('nome').AsString;
+    lfrmDistribuidorCadastro.CPFCNPJ := DM.qryDistribuidor.FieldByName('cpfcnpj').AsString;
+    lfrmDistribuidorCadastro.ShowModal;
+    DM.qryDistribuidor.DisableControls;
+  finally
+    FreeAndNil(lfrmDistribuidorCadastro);
+    DM.qryDistribuidor.Close;
+    DM.qryDistribuidor.Open;
+    DM.qryDistribuidor.EnableControls;
+  end;
 end;
 
 procedure TfrmDistribuidorAltera.btnFecharClick(Sender: TObject);
 begin
+  DM.qryDistribuidor.Close;
   Close;
 end;
 
 procedure TfrmDistribuidorAltera.FormShow(Sender: TObject);
 begin
-  if DataModule1.qryDistribuidor.Active = False then
-    DataModule1.qryDistribuidor.Open;
+  DM.qryDistribuidor.Open;
 end;
 
 end.

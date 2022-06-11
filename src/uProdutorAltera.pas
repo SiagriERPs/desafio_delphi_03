@@ -10,8 +10,8 @@ uses
 type
   TfrmProdutorAltera = class(TForm)
     grdProdutor: TDBGrid;
-    btnAlterar: TBitBtn;
-    btnFechar: TBitBtn;
+    btnAlterar: TSpeedButton;
+    btnFechar: TSpeedButton;
     procedure FormShow(Sender: TObject);
     procedure btnFecharClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
@@ -21,9 +21,6 @@ type
     { Public declarations }
   end;
 
-var
-  frmProdutorAltera: TfrmProdutorAltera;
-
 implementation
 
 {$R *.dfm}
@@ -31,24 +28,34 @@ implementation
 uses uDM, uProdutorCadastro;
 
 procedure TfrmProdutorAltera.btnAlterarClick(Sender: TObject);
+var
+  lfrmProdutorCadastro: TfrmProdutorCadastro;
 begin
-  DataModule1.qryProdutor.Edit;
+  lfrmProdutorCadastro := TfrmProdutorCadastro.Create(Application);
 
-  frmProdutorCadastro.edtNome.Text := DataModule1.qryProdutor.FieldByName('nome').AsString;
-  frmProdutorCadastro.edtCPFCNPJ.Text := DataModule1.qryProdutor.FieldByName('cpfcnpj').AsString;
-
-  frmProdutorCadastro.ShowModal;
+  try
+    lfrmProdutorCadastro.Codigo := DM.qryProdutor.FieldByName('Codigo').AsInteger;
+    lfrmProdutorCadastro.Nome := DM.qryProdutor.FieldByName('nome').AsString;
+    lfrmProdutorCadastro.CPFCNPJ := DM.qryProdutor.FieldByName('cpfcnpj').AsString;
+    lfrmProdutorCadastro.ShowModal;
+    DM.qryProdutor.DisableControls;
+  finally
+    FreeAndNil(lfrmProdutorCadastro);
+    DM.qryProdutor.Close;
+    DM.qryProdutor.Open;
+    DM.qryProdutor.EnableControls;
+  end;
 end;
 
 procedure TfrmProdutorAltera.btnFecharClick(Sender: TObject);
 begin
+  DM.qryProdutor.Close;
   Close;
 end;
 
 procedure TfrmProdutorAltera.FormShow(Sender: TObject);
 begin
-  if DataModule1.qryProdutor.Active = False then
-    DataModule1.qryProdutor.Open;
+  DM.qryProdutor.Open;
 end;
 
 end.

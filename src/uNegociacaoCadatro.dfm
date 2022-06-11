@@ -10,7 +10,7 @@ object frmNegociacaoCadastro: TfrmNegociacaoCadastro
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'Tahoma'
+  Font.Name = 'Segoe UI'
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
@@ -20,21 +20,21 @@ object frmNegociacaoCadastro: TfrmNegociacaoCadastro
   object Label1: TLabel
     Left = 8
     Top = 8
-    Width = 42
+    Width = 46
     Height = 13
     Caption = 'Produtor'
   end
   object Label2: TLabel
     Left = 8
     Top = 56
-    Width = 54
+    Width = 62
     Height = 13
     Caption = 'Distribuidor'
   end
   object Label3: TLabel
     Left = 8
     Top = 108
-    Width = 98
+    Width = 108
     Height = 13
     Caption = 'Produtos dispon'#237'veis'
   end
@@ -43,7 +43,8 @@ object frmNegociacaoCadastro: TfrmNegociacaoCadastro
     Top = 144
     Width = 23
     Height = 22
-    Caption = '>'
+    ImageIndex = 5
+    Images = frmPrincipal.ImageList
     OnClick = spdAdicionarUmProdutoClick
   end
   object spdAdicionarTodosProdutos: TSpeedButton
@@ -51,7 +52,8 @@ object frmNegociacaoCadastro: TfrmNegociacaoCadastro
     Top = 172
     Width = 23
     Height = 22
-    Caption = '>>'
+    ImageIndex = 6
+    Images = frmPrincipal.ImageList
     OnClick = spdAdicionarTodosProdutosClick
   end
   object spdRemoveUmProduto: TSpeedButton
@@ -59,7 +61,8 @@ object frmNegociacaoCadastro: TfrmNegociacaoCadastro
     Top = 200
     Width = 23
     Height = 22
-    Caption = '<'
+    ImageIndex = 7
+    Images = frmPrincipal.ImageList
     OnClick = spdRemoveUmProdutoClick
   end
   object spdRemoveTodosProdutos: TSpeedButton
@@ -67,36 +70,57 @@ object frmNegociacaoCadastro: TfrmNegociacaoCadastro
     Top = 228
     Width = 23
     Height = 22
-    Caption = '<<'
+    ImageIndex = 8
+    Images = frmPrincipal.ImageList
     OnClick = spdRemoveTodosProdutosClick
   end
   object Label4: TLabel
     Left = 224
     Top = 108
-    Width = 100
+    Width = 110
     Height = 13
     Caption = 'Produtos negociados'
   end
   object Label5: TLabel
     Left = 8
     Top = 262
-    Width = 76
+    Width = 83
     Height = 13
     Caption = 'Total negociado'
   end
   object Label6: TLabel
     Left = 224
     Top = 262
-    Width = 31
+    Width = 32
     Height = 13
     Caption = 'Status'
   end
   object Label7: TLabel
     Left = 8
     Top = 310
-    Width = 85
+    Width = 89
     Height = 13
     Caption = 'Data de Cadastro'
+  end
+  object btnGravar: TSpeedButton
+    Left = 240
+    Top = 360
+    Width = 75
+    Height = 25
+    Caption = 'Gravar'
+    ImageIndex = 0
+    Images = frmPrincipal.ImageList
+    OnClick = btnOkClick
+  end
+  object btnCancelar: TSpeedButton
+    Left = 326
+    Top = 360
+    Width = 75
+    Height = 25
+    Caption = 'Cancelar'
+    ImageIndex = 1
+    Images = frmPrincipal.ImageList
+    OnClick = btnCancelarClick
   end
   object cboProdutor: TDBLookupComboBox
     Left = 8
@@ -105,7 +129,7 @@ object frmNegociacaoCadastro: TfrmNegociacaoCadastro
     Height = 21
     KeyField = 'CODIGO'
     ListField = 'NOME'
-    ListSource = DataModule1.dtsProdutor
+    ListSource = DM.dtsProdutor
     TabOrder = 0
   end
   object cboDistribuidor: TDBLookupComboBox
@@ -115,7 +139,7 @@ object frmNegociacaoCadastro: TfrmNegociacaoCadastro
     Height = 21
     KeyField = 'CODIGO'
     ListField = 'NOME'
-    ListSource = DataModule1.dtsDistribuidor
+    ListSource = DM.dtsDistribuidor
     TabOrder = 1
   end
   object grdProdutosDisponiveis: TDBGrid
@@ -123,12 +147,13 @@ object frmNegociacaoCadastro: TfrmNegociacaoCadastro
     Top = 136
     Width = 177
     Height = 120
-    DataSource = DataModule1.dtsConsultaProduto
+    DataSource = DM.dtsConsultaProduto
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
     TabOrder = 2
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -11
-    TitleFont.Name = 'Tahoma'
+    TitleFont.Name = 'Segoe UI'
     TitleFont.Style = []
     Columns = <
       item
@@ -144,11 +169,12 @@ object frmNegociacaoCadastro: TfrmNegociacaoCadastro
     Width = 177
     Height = 120
     DataSource = dtsProdutosNegociados
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
     TabOrder = 3
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -11
-    TitleFont.Name = 'Tahoma'
+    TitleFont.Name = 'Segoe UI'
     TitleFont.Style = []
   end
   object edtTotal: TEdit
@@ -158,28 +184,6 @@ object frmNegociacaoCadastro: TfrmNegociacaoCadastro
     Height = 21
     Enabled = False
     TabOrder = 4
-  end
-  object btnOk: TBitBtn
-    Left = 245
-    Top = 361
-    Width = 75
-    Height = 25
-    Caption = 'OK'
-    Default = True
-    NumGlyphs = 2
-    TabOrder = 7
-    OnClick = btnOkClick
-  end
-  object btnCancelar: TBitBtn
-    Left = 326
-    Top = 361
-    Width = 75
-    Height = 25
-    Cancel = True
-    Caption = 'Cancelar'
-    NumGlyphs = 2
-    TabOrder = 8
-    OnClick = btnCancelarClick
   end
   object cboStatus: TComboBox
     Left = 224

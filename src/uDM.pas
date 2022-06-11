@@ -8,11 +8,11 @@ uses
   FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
   FireDAC.Phys, FireDAC.Phys.FB, FireDAC.Phys.FBDef, FireDAC.VCLUI.Wait,
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
-  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, Dialogs;
 
 type
-  TDataModule1 = class(TDataModule)
-    FDConnection1: TFDConnection;
+  TDM = class(TDataModule)
+    FDConnection: TFDConnection;
     FDTransaction1: TFDTransaction;
     qryProdutor: TFDQuery;
     qryProduto: TFDQuery;
@@ -70,17 +70,53 @@ type
     FloatField1: TFloatField;
   private
     { Private declarations }
+    function GetCodigoTabela(pCampo, pNomeTabela: String): Integer;
   public
     { Public declarations }
+    function ObterCodigoTabela(pCampo, pNomeTabela: String): Integer;
   end;
 
 var
-  DataModule1: TDataModule1;
+  DM: TDM;
 
 implementation
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+{ TDM }
+
+function TDM.GetCodigoTabela(pCampo, pNomeTabela: String): Integer;
+var
+  lQry: TFDQuery;
+begin
+  lQry := TFDQuery.Create(Self);
+
+  try
+    lQry.Connection := FDConnection;
+    lQry.SQL.Add('SELECT MAX(' + pCampo + ') AS Codigo');
+    lQry.SQL.Add('FROM ' + pNomeTabela);
+
+    try
+      lQry.Open;
+
+      Result := lQry.FieldByName('Codigo').AsInteger + 1;
+    except
+      On E:Exception do
+      begin
+        MessageDlg('Ocoreu o erro ' + E.Message + ' ao obter o código da tabela ' + pNomeTabela, mtInformation, [mbOk], 0);
+      end;
+    end;
+  finally
+    lQry.Close;
+    FreeAndNil(lQry);
+  end;
+end;
+
+function TDM.ObterCodigoTabela(pCampo, pNomeTabela: String): Integer;
+begin
+  Result := GetCodigoTabela(pCampo, pNomeTabela);
+end;
 
 end.

@@ -1,3 +1,19 @@
+{******************************************************************************
+ * Controle de Negociação 2.0
+ * Novidades da versão:
+ * - Forms passaram a ser dinâmicos
+ * - Variáveis locais com o nome padronizado iniciando pela letra "l"
+ * - Parâmetros com o nome padronizado iniciando pela letra "p"
+ * - Variáveis globais mantidas na seção private iniciando pela letra "F"
+ * - Utilização de propriedades e conceito de encapsulamento
+ * - Reutilização de código
+ * - Nome das rotinas usando verbo no infinitivo
+ * - Nome das rotinas de forma clara com obojetivo de dispensar comentários
+ * - Substituição de operações globais por rotinas
+ * - Acrescentado imagem aos botões
+ * - Criado/melhorado rotinas de validação dos dados
+ * - Adicionado a exportação para Excel os dados das negociações
+ ******************************************************************************}
 unit uPrincipal;
 
 interface
@@ -5,7 +21,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, Vcl.ExtCtrls,
-  Vcl.Imaging.pngimage;
+  Vcl.Imaging.pngimage, System.ImageList, Vcl.ImgList;
 
 type
   TfrmPrincipal = class(TForm)
@@ -22,7 +38,9 @@ type
     Negociao1: TMenuItem;
     Negociao2: TMenuItem;
     Alterao5: TMenuItem;
-    Image1: TImage;
+    Image: TImage;
+    ImageList: TImageList;
+    Sair1: TMenuItem;
     procedure Cadastro1Click(Sender: TObject);
     procedure Alterao1Click(Sender: TObject);
     procedure Cadastro2Click(Sender: TObject);
@@ -31,7 +49,7 @@ type
     procedure Alterao3Click(Sender: TObject);
     procedure Negociao2Click(Sender: TObject);
     procedure Alterao5Click(Sender: TObject);
-    procedure Consulta1Click(Sender: TObject);
+    procedure Sair1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -50,111 +68,116 @@ uses uProdutorCadastro, uProdutorAltera, uNegociacaoAlteraConsulta,
   uProdutoCadastro, uProdutoAltera, uDM;
 
 procedure TfrmPrincipal.Alterao1Click(Sender: TObject);
+var
+  lfrmProdutorAltera: TfrmProdutorAltera;
 begin
-  frmProdutorAltera.ShowModal;
+  lfrmProdutorAltera := TfrmProdutorAltera.Create(Application);
+
+  try
+    lfrmProdutorAltera.ShowModal;
+  finally
+    FreeAndNil(lfrmProdutorAltera);
+  end;
 end;
 
 procedure TfrmPrincipal.Alterao2Click(Sender: TObject);
+var
+  lfrmDistribuidorAltera: TfrmDistribuidorAltera;
 begin
-  frmDistribuidorAltera.ShowModal;
+  lfrmDistribuidorAltera := TfrmDistribuidorAltera.Create(Application);
+
+  try
+    lfrmDistribuidorAltera.ShowModal;
+  finally
+    FreeAndNil(lfrmDistribuidorAltera);
+  end;
 end;
 
 procedure TfrmPrincipal.Alterao3Click(Sender: TObject);
+var
+  lfrmProdutoAltera: TfrmProdutoAltera;
 begin
-  frmProdutoAltera.ShowModal;
+  lfrmProdutoAltera := TfrmProdutoAltera.Create(Application);
+
+  try
+    lfrmProdutoAltera.ShowModal;
+  finally
+    FreeAndNil(lfrmProdutoAltera);
+  end;
 end;
 
 procedure TfrmPrincipal.Alterao5Click(Sender: TObject);
+var
+  lfrmNegociacaoAlteraConsulta: TfrmNegociacaoAlteraConsulta;
 begin
-  frmNegociacaoAlteraConsulta.ShowModal;
+  lfrmNegociacaoAlteraConsulta := TfrmNegociacaoAlteraConsulta.Create(Application);
+
+  try
+    lfrmNegociacaoAlteraConsulta.ShowModal;
+  finally
+    FreeAndNil(lfrmNegociacaoAlteraConsulta);
+  end;
 end;
 
 procedure TfrmPrincipal.Cadastro1Click(Sender: TObject);
+var
+  lfrmProdutorCadastro: TfrmProdutorCadastro;
 begin
-  if DataModule1.qryProdutor.Active = False then
-    DataModule1.qryProdutor.Open;
+  lfrmProdutorCadastro := TfrmProdutorCadastro.Create(Application);
 
-  frmProdutorCadastro.edtNome.Text := '';
-  frmProdutorCadastro.edtCPFCNPJ.Text := '';
-
-  if frmProdutorCadastro.cdsLimiteCredito.Active = False then
-    frmProdutorCadastro.cdsLimiteCredito.CreateDataset
-  else
-    frmProdutorCadastro.cdsLimiteCredito.EmptyDataSet;
-
-  DataModule1.qryProdutor.Append;
-  frmProdutorCadastro.ShowModal;
-
+  try
+    lfrmProdutorCadastro.Codigo := 0;
+    lfrmProdutorCadastro.ShowModal;
+  finally
+    FreeAndNil(lfrmProdutorCadastro);
+  end;
 end;
 
 procedure TfrmPrincipal.Cadastro2Click(Sender: TObject);
+var
+  lfrmDistribuidorCadastro: TfrmDistribuidorCadastro;
 begin
-  if DataModule1.qryDistribuidor.Active = False then
-     DataModule1.qryDistribuidor.Open;
+  lfrmDistribuidorCadastro := TfrmDistribuidorCadastro.Create(Application);
 
-  frmDistribuidorCadastro.edtNome.Text := '';
-  frmDistribuidorCadastro.edtCPFCNPJ.Text := '';
-  DataModule1.qryDistribuidor.Append;
-  frmDistribuidorCadastro.ShowModal;
-end;
-
-procedure TfrmPrincipal.Consulta1Click(Sender: TObject);
-begin
-  frmNegociacaoAlteraConsulta.ShowModal;
+  try
+    lfrmDistribuidorCadastro.Codigo := 0;
+    lfrmDistribuidorCadastro.ShowModal;
+  finally
+    FreeAndNil(lfrmDistribuidorCadastro);
+  end;
 end;
 
 procedure TfrmPrincipal.Negociao2Click(Sender: TObject);
+var
+  lfrmNegociacaoCadastro: TfrmNegociacaoCadastro;
 begin
-  if DataModule1.qryNegociacao.Active = False then
-    DataModule1.qryNegociacao.Open;
+  lfrmNegociacaoCadastro := TfrmNegociacaoCadastro.Create(Application);
 
-  if DataModule1.qryNegociacaoDetalhe.Active = False then
-    DataModule1.qryNegociacaoDetalhe.Open;
-
-  if DataModule1.qryProduto.Active = False then
-    DataModule1.qryProduto.Open;
-
-  if DataModule1.qryProdutor.Active = False then
-     DataModule1.qryProdutor.Open;
-
-  if DataModule1.qryDistribuidor.Active = False then
-     DataModule1.qryDistribuidor.Open;
-
-  if not frmNegociacaoCadastro.cdsProdutosNegociados.Active then
-    frmNegociacaoCadastro.cdsProdutosNegociados.CreateDataSet
-  else
-    frmNegociacaoCadastro.cdsProdutosNegociados.EmptyDataSet;
-
-  frmNegociacaoCadastro.edtTotal.Text := '';
-  frmNegociacaoCadastro.edtData.Text := DateToStr(now);
-  frmNegociacaoCadastro.cboStatus.ItemIndex := 0;
-  frmNegociacaoCadastro.cboStatus.Enabled := False;
-
-  frmNegociacaoCadastro.cboDistribuidor.Enabled := True;
-  frmNegociacaoCadastro.cboProdutor.Enabled := True;
-  frmNegociacaoCadastro.edtData.Enabled := True;
-  //frmNegociacaoCadastro.edtTotal.Enabled := True;
-  frmNegociacaoCadastro.spdAdicionarUmProduto.Enabled := True;
-  frmNegociacaoCadastro.spdAdicionarTodosProdutos.Enabled := True;
-  frmNegociacaoCadastro.spdRemoveUmProduto.Enabled := True;
-  frmNegociacaoCadastro.spdRemoveTodosProdutos.Enabled := True;
-
-  frmNegociacaoCadastro.grdProdutosDisponiveis.Enabled := True;
-  frmNegociacaoCadastro.grdProdutosNegociados.Enabled := True;
-
-  DataModule1.qryNegociacao.Append;
-  frmNegociacaoCadastro.ShowModal;
+  try
+    lfrmNegociacaoCadastro.CodigoNegociacao := 0;
+    lfrmNegociacaoCadastro.ShowModal;
+  finally
+    FreeAndNil(lfrmNegociacaoCadastro);
+  end;
 end;
 
 procedure TfrmPrincipal.Produto2Click(Sender: TObject);
+var
+  lfrmProdutoCadastro: TfrmProdutoCadastro;
 begin
-  if DataModule1.qryProduto.Active = False then
-     DataModule1.qryProduto.Open;
+  lfrmProdutoCadastro := TfrmProdutoCadastro.Create(Application);
 
-  frmProdutoCadastro.edtNome.Text := '';
-  frmProdutoCadastro.edtPreco.Text := '';
-  DataModule1.qryProduto.Append;
-  frmProdutoCadastro.ShowModal;
+  try
+    lfrmProdutoCadastro.Codigo := 0;
+    lfrmProdutoCadastro.ShowModal;
+  finally
+    FreeAndNil(lfrmProdutoCadastro);
+  end;
+end;
+
+procedure TfrmPrincipal.Sair1Click(Sender: TObject);
+begin
+  Application.Terminate;
 end;
 
 end.

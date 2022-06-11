@@ -1,8 +1,8 @@
-object DataModule1: TDataModule1
+object DM: TDM
   OldCreateOrder = False
   Height = 322
   Width = 535
-  object FDConnection1: TFDConnection
+  object FDConnection: TFDConnection
     Params.Strings = (
       
         'Database=D:\Controle de Negociacao\desafio_delphi_03\data\NEGOCI' +
@@ -16,35 +16,39 @@ object DataModule1: TDataModule1
     Top = 24
   end
   object FDTransaction1: TFDTransaction
-    Connection = FDConnection1
+    Connection = FDConnection
     Left = 256
     Top = 144
   end
   object qryProdutor: TFDQuery
-    Connection = FDConnection1
+    Connection = FDConnection
     Transaction = FDTransaction1
     SQL.Strings = (
       'select * from produtor')
     Left = 80
     Top = 88
     object qryProdutorCODIGO: TSmallintField
+      DisplayLabel = 'C'#243'digo'
       FieldName = 'CODIGO'
       Origin = 'CODIGO'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
     end
     object qryProdutorNOME: TStringField
+      DisplayLabel = 'Nome'
+      DisplayWidth = 40
       FieldName = 'NOME'
       Origin = 'NOME'
       Size = 60
     end
     object qryProdutorCPFCNPJ: TStringField
+      DisplayLabel = 'CPF/CNPJ'
       FieldName = 'CPFCNPJ'
       Origin = 'CPFCNPJ'
     end
   end
   object qryProduto: TFDQuery
-    Connection = FDConnection1
+    Connection = FDConnection
     Transaction = FDTransaction1
     SQL.Strings = (
       'select * from produto')
@@ -52,23 +56,29 @@ object DataModule1: TDataModule1
     Top = 200
     object qryProdutoCODIGO: TSmallintField
       AutoGenerateValue = arAutoInc
+      DisplayLabel = 'C'#243'digo'
       FieldName = 'CODIGO'
       Origin = 'CODIGO'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
     end
     object qryProdutoNOME: TStringField
+      DisplayLabel = 'Nome'
+      DisplayWidth = 40
       FieldName = 'NOME'
       Origin = 'NOME'
       Size = 60
     end
     object qryProdutoVALOR: TSingleField
+      DisplayLabel = 'Valor'
       FieldName = 'VALOR'
       Origin = 'VALOR'
+      DisplayFormat = '#,##0.00'
+      currency = True
     end
   end
   object qryDistribuidor: TFDQuery
-    Connection = FDConnection1
+    Connection = FDConnection
     Transaction = FDTransaction1
     SQL.Strings = (
       'select * from distribuidor')
@@ -76,22 +86,25 @@ object DataModule1: TDataModule1
     Top = 144
     object qryDistribuidorCODIGO: TSmallintField
       AutoGenerateValue = arAutoInc
+      DisplayLabel = 'C'#243'digo'
       FieldName = 'CODIGO'
       Origin = 'CODIGO'
       Required = True
     end
     object qryDistribuidorNOME: TStringField
+      DisplayLabel = 'Nome'
       FieldName = 'NOME'
       Origin = 'NOME'
       Size = 60
     end
     object qryDistribuidorCPFCNPJ: TStringField
+      DisplayLabel = 'CPF/CNPJ'
       FieldName = 'CPFCNPJ'
       Origin = 'CPFCNPJ'
     end
   end
   object qryNegociacao: TFDQuery
-    Connection = FDConnection1
+    Connection = FDConnection
     Transaction = FDTransaction1
     SQL.Strings = (
       'select * from negociacao')
@@ -106,28 +119,35 @@ object DataModule1: TDataModule1
     end
     object qryNegociacaoPRODUTOR: TSmallintField
       AutoGenerateValue = arAutoInc
+      DisplayLabel = 'Produtor'
       FieldName = 'PRODUTOR'
       Origin = 'PRODUTOR'
     end
     object qryNegociacaoDISTRIBUIDOR: TSmallintField
+      DisplayLabel = 'Distribuidor'
       FieldName = 'DISTRIBUIDOR'
       Origin = 'DISTRIBUIDOR'
     end
     object qryNegociacaoVALOR: TSingleField
+      DisplayLabel = 'Valor'
       FieldName = 'VALOR'
       Origin = 'VALOR'
+      DisplayFormat = '#,##0.00'
+      currency = True
     end
     object qryNegociacaoDATA: TDateField
+      DisplayLabel = 'Data'
       FieldName = 'DATA'
       Origin = '"DATA"'
     end
     object qryNegociacaoSTATUS: TSmallintField
+      DisplayLabel = 'Status'
       FieldName = 'STATUS'
       Origin = 'STATUS'
     end
   end
   object qryNegociacaoDetalhe: TFDQuery
-    Connection = FDConnection1
+    Connection = FDConnection
     Transaction = FDTransaction1
     SQL.Strings = (
       'select * '
@@ -177,7 +197,7 @@ object DataModule1: TDataModule1
     Top = 248
   end
   object qryConsultaProduto: TFDQuery
-    Connection = FDConnection1
+    Connection = FDConnection
     Transaction = FDTransaction1
     SQL.Strings = (
       'select * from produto'
@@ -222,7 +242,7 @@ object DataModule1: TDataModule1
         FilterOptions = [ekPartial]
       end>
     IndexName = 'IDXPRODUTOR'
-    Connection = FDConnection1
+    Connection = FDConnection
     Transaction = FDTransaction1
     SQL.Strings = (
       
@@ -243,6 +263,7 @@ object DataModule1: TDataModule1
     Left = 264
     Top = 200
     object qryConsultaNegociacaoCODIGO: TSmallintField
+      DisplayLabel = 'N'#186' Negocia'#231#227'o'
       FieldName = 'CODIGO'
       Origin = 'CODIGO'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
@@ -316,7 +337,7 @@ object DataModule1: TDataModule1
     Top = 248
   end
   object qryCredito: TFDQuery
-    Connection = FDConnection1
+    Connection = FDConnection
     Transaction = FDTransaction1
     SQL.Strings = (
       'select * from credito')
@@ -331,17 +352,19 @@ object DataModule1: TDataModule1
       Visible = False
     end
     object qryCreditoPRODUTOR: TSmallintField
+      DisplayLabel = 'Produtor'
       FieldName = 'PRODUTOR'
       Origin = 'PRODUTOR'
       Visible = False
     end
     object qryCreditoDISTRIBUIDOR: TSmallintField
+      DisplayLabel = 'Distribuidor'
       FieldName = 'DISTRIBUIDOR'
       Origin = 'DISTRIBUIDOR'
       Visible = False
     end
     object qryCreditoNOMEDISTRIBUIDOR: TStringField
-      DisplayLabel = 'Distribuidor'
+      DisplayLabel = 'Nome do Distribuidor'
       DisplayWidth = 40
       FieldName = 'NOMEDISTRIBUIDOR'
       Origin = 'NOMEDISTRIBUIDOR'
@@ -360,7 +383,7 @@ object DataModule1: TDataModule1
     Top = 72
   end
   object qryConsultaCredito: TFDQuery
-    Connection = FDConnection1
+    Connection = FDConnection
     Transaction = FDTransaction1
     SQL.Strings = (
       'select sum(coalesce(valor,0)) as valor'
@@ -391,7 +414,7 @@ object DataModule1: TDataModule1
     end
   end
   object qryConsultaCreditoUsado: TFDQuery
-    Connection = FDConnection1
+    Connection = FDConnection
     Transaction = FDTransaction1
     SQL.Strings = (
       'select sum(COALESCE(valor,0)) as valor'
@@ -399,7 +422,7 @@ object DataModule1: TDataModule1
       'where produtor = :pProdutor'
       'and distribuidor = :pDistribuidor')
     Left = 448
-    Top = 176
+    Top = 216
     ParamData = <
       item
         Name = 'PPRODUTOR'
