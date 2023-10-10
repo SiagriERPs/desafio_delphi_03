@@ -1,0 +1,135 @@
+CREATE TABLE CAD_PRODUTOR (
+    ID INTEGER primary KEY,
+    NOME VARCHAR(500),
+    STATUS INTEGER,
+    CPF_CNPJ VARCHAR(18)
+)
+
+CREATE SEQUENCE GEN_CAD_PRODUTOR_ID
+
+create trigger cad_produtor_bi for cad_produtor
+active before insert position 0
+as
+begin
+  if (new.id is null) then
+    new.id = gen_id(gen_cad_produtor_id,1);
+end
+
+CREATE TABLE CAD_DISTRIBUIDOR (
+    ID INTEGER primary KEY,
+    NOME VARCHAR(500),
+    STATUS INTEGER,
+    CNPJ VARCHAR(18)
+)
+
+CREATE SEQUENCE GEN_CAD_DISTRIBUIDOR_ID
+
+create trigger cad_distribuidor_bi for cad_distribuidor
+active before insert position 0
+as
+begin
+  if (new.id is null) then
+    new.id = gen_id(gen_cad_distribuidor_id,1);
+end
+
+CREATE TABLE VINCULACAO_COMERCIAL (
+    ID INTEGER primary KEY,
+    DESCRICAO VARCHAR(500),
+    STATUS INTEGER,
+    LIMITE_CREDITO double precision,
+    FK_PRODUTOR integer,
+    FK_DISTRIBUIDOR integer
+)
+
+CREATE SEQUENCE GEN_VINCULACAO_COMERCIAL_ID
+
+create trigger vinculacao_comercial_bi for vinculacao_comercial
+active before insert position 0
+as
+begin
+  if (new.id is null) then
+    new.id = gen_id(gen_vinculacao_comercial_id,1);
+end
+
+ALTER TABLE VINCULACAO_COMERCIAL
+ADD CONSTRAINT FK_VINCULACAO_COMERCIAL_1
+FOREIGN KEY (FK_PRODUTOR)
+REFERENCES CAD_PRODUTOR(ID)
+ON DELETE CASCADE
+
+ALTER TABLE VINCULACAO_COMERCIAL
+ADD CONSTRAINT FK_VINCULACAO_COMERCIAL_2
+FOREIGN KEY (FK_DISTRIBUIDOR)
+REFERENCES CAD_DISTRIBUIDOR(ID)
+ON DELETE CASCADE
+
+CREATE TABLE CAD_PRODUTO (
+    ID INTEGER primary KEY,
+    DESCRICAO VARCHAR(500),
+    STATUS INTEGER,
+    PRECO_VENDA double precision
+)
+
+CREATE SEQUENCE GEN_CAD_PRODUTO_ID
+
+create trigger cad_produto_bi for cad_produto
+active before insert position 0
+as
+begin
+  if (new.id is null) then
+    new.id = gen_id(gen_cad_produto_id,1);
+end
+
+CREATE TABLE NEGOCIACAO (
+    ID INTEGER primary KEY,
+    FK_VINCULACAO_COMERCIAL INTEGER,
+    STATUS INTEGER,
+    VALOR double precision
+)
+
+CREATE SEQUENCE GEN_NEGOCIACAO_ID
+
+create trigger negociacao_bi for negociacao
+active before insert position 0
+as
+begin
+  if (new.id is null) then
+    new.id = gen_id(gen_negociacao_id,1);
+end
+
+ALTER TABLE NEGOCIACAO ADD CONSTRAINT FK_NEGOCIACAO_1
+FOREIGN KEY (FK_VINCULACAO_COMERCIAL)
+REFERENCES VINCULACAO_COMERCIAL(ID)
+ON DELETE CASCADE
+
+CREATE TABLE NEGOCIACAO_PRODUTOS (
+    ID INTEGER primary KEY,
+    FK_NEGOCIACAO INTEGER,
+    FK_PRODUTO INTEGER,
+    STATUS INTEGER,
+    VALOR_UN double precision,
+    QTD double precision,
+    VALOR_TOTAL double precision
+)
+
+CREATE SEQUENCE GEN_NEGOCIACAO_PRODUTOS_ID
+
+create trigger negociacao_produtos_bi for negociacao_produtos
+active before insert position 0
+as
+begin
+  if (new.id is null) then
+    new.id = gen_id(gen_negociacao_produtos_id,1);
+end
+
+ALTER TABLE NEGOCIACAO_PRODUTOS
+ADD CONSTRAINT FK_NEGOCIACAO_PRODUTOS_1
+FOREIGN KEY (FK_NEGOCIACAO)
+REFERENCES NEGOCIACAO(ID)
+ON DELETE CASCADE
+
+ALTER TABLE NEGOCIACAO_PRODUTOS
+ADD CONSTRAINT FK_NEGOCIACAO_PRODUTOS_2
+FOREIGN KEY (FK_PRODUTO)
+REFERENCES CAD_PRODUTO(ID)
+ON DELETE CASCADE
